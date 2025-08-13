@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,7 +34,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var Partecipante = /** @class */ (function () {
     function Partecipante(nome, cognome, paeseDiOrigine, istruzione, competenzeLinguistiche, formazioneDiInteresse) {
         this.nome = nome;
@@ -98,394 +96,392 @@ var Azienda = /** @class */ (function () {
     };
     return Azienda;
 }());
-var readline = require("readline");
-var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
-var partecipanti = [];
-var corsi = [];
+function showMessage(message) {
+    alert(message);
+}
+// Funzione per chiedere input usando prompt (browser)
+function askQuestion(question) {
+    return new Promise(function (resolve) {
+        var answer = prompt(question) || ''; // Fallback to empty string if null
+        resolve(answer);
+    });
+}
+// Array per memorizzare le aziende
 var aziende = [];
+// Array per memorizzare i corsi
+var corsi = [];
+// Array per memorizzare i partecipanti
+var partecipanti = [];
+// Main menu
 function showMainMenu() {
-    console.log("\n=== Sistema di Gestione IncluDO ===");
-    console.log("1. Aggiungi un partecipante");
-    console.log("2. Crea un nuovo corso");
-    console.log("3. Registra una nuova azienda");
-    console.log("4. Iscrivi un partecipante a un corso");
-    console.log("5. Assumi un partecipante in un'azienda");
-    console.log("6. Visualizza tutti i partecipanti");
-    console.log("7. Visualizza tutti i corsi");
-    console.log("8. Visualizza le aziende");
-    console.log("9. Esci");
-    rl.question("\nSeleziona un'opzione: ", function (answer) {
-        switch (answer) {
-            case "1":
-                addPartecipante();
-                break;
-            case "2":
-                createCorso();
-                break;
-            case "3":
-                addAzienda();
-                break;
-            case "4":
-                iscriviPartecipanteACorso();
-                break;
-            case "5":
-                assumiPartecipanteInAzienda();
-                break;
-            case "6":
-                showPartecipanti();
-                break;
-            case "7":
-                showCorsi();
-                break;
-            case "8":
-                showAziende();
-                break;
-            case "9":
-                console.log("Arrivederci!");
-                rl.close();
-                break;
-            default:
-                console.log("Opzione non valida. Riprova.");
-                showMainMenu();
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        var menu, answer, _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    menu = "=== Sistema di Gestione IncluDO ===\n1. Aggiungi un partecipante\n2. Crea un nuovo corso\n3. Registra una nuova azienda\n4. Iscrivi un partecipante a un corso\n5. Assumi un partecipante in un'azienda\n6. Visualizza tutti i partecipanti\n7. Visualizza tutti i corsi\n8. Visualizza le aziende\n9. Esci";
+                    return [4 /*yield*/, askQuestion(menu + "\n\nSeleziona un'opzione: ")];
+                case 1:
+                    answer = _b.sent();
+                    _a = answer;
+                    switch (_a) {
+                        case "1": return [3 /*break*/, 2];
+                        case "2": return [3 /*break*/, 4];
+                        case "3": return [3 /*break*/, 6];
+                        case "4": return [3 /*break*/, 8];
+                        case "5": return [3 /*break*/, 10];
+                        case "6": return [3 /*break*/, 12];
+                        case "7": return [3 /*break*/, 14];
+                        case "8": return [3 /*break*/, 16];
+                        case "9": return [3 /*break*/, 18];
+                    }
+                    return [3 /*break*/, 20];
+                case 2: return [4 /*yield*/, addPartecipante()];
+                case 3:
+                    _b.sent();
+                    return [3 /*break*/, 22];
+                case 4: return [4 /*yield*/, createCorso()];
+                case 5:
+                    _b.sent();
+                    return [3 /*break*/, 22];
+                case 6: return [4 /*yield*/, addAzienda()];
+                case 7:
+                    _b.sent();
+                    return [3 /*break*/, 22];
+                case 8: return [4 /*yield*/, iscriviPartecipanteACorso()];
+                case 9:
+                    _b.sent();
+                    return [3 /*break*/, 22];
+                case 10: return [4 /*yield*/, assumiPartecipanteInAzienda()];
+                case 11:
+                    _b.sent();
+                    return [3 /*break*/, 22];
+                case 12: return [4 /*yield*/, showPartecipanti()];
+                case 13:
+                    _b.sent();
+                    return [3 /*break*/, 22];
+                case 14: return [4 /*yield*/, showCorsi()];
+                case 15:
+                    _b.sent();
+                    return [3 /*break*/, 22];
+                case 16: return [4 /*yield*/, showAziende()];
+                case 17:
+                    _b.sent();
+                    return [3 /*break*/, 22];
+                case 18: return [4 /*yield*/, showMessage("Arrivederci!")];
+                case 19:
+                    _b.sent();
+                    // Qui termina senza closeApp perché siamo in browser
+                    return [2 /*return*/];
+                case 20: return [4 /*yield*/, showMessage("Opzione non valida. Riprova.")];
+                case 21:
+                    _b.sent();
+                    _b.label = 22;
+                case 22:
+                    if (!(answer !== "9")) return [3 /*break*/, 24];
+                    return [4 /*yield*/, showMainMenu()];
+                case 23:
+                    _b.sent();
+                    _b.label = 24;
+                case 24: return [2 /*return*/];
+            }
+        });
     });
 }
 function addPartecipante() {
-    var _this = this;
-    console.log("\n=== Aggiungi un nuovo partecipante ===");
-    var askQuestion = function (question) {
-        return new Promise(function (resolve) {
-            rl.question(question, function (answer) {
-                resolve(answer);
-            });
-        });
-    };
-    (function () { return __awaiter(_this, void 0, void 0, function () {
+    return __awaiter(this, void 0, void 0, function () {
         var nome, cognome, paeseDiOrigine, istruzione, competenzeLinguistiche, formazioneDiInteresse, nuovoPartecipante;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, askQuestion("Nome: ")];
+                case 0: return [4 /*yield*/, showMessage("=== Aggiungi un nuovo partecipante ===")];
                 case 1:
+                    _a.sent();
+                    return [4 /*yield*/, askQuestion("Nome: ")];
+                case 2:
                     nome = _a.sent();
                     return [4 /*yield*/, askQuestion("Cognome: ")];
-                case 2:
+                case 3:
                     cognome = _a.sent();
                     return [4 /*yield*/, askQuestion("Paese di origine: ")];
-                case 3:
+                case 4:
                     paeseDiOrigine = _a.sent();
                     return [4 /*yield*/, askQuestion("Livello di istruzione: ")];
-                case 4:
+                case 5:
                     istruzione = _a.sent();
                     return [4 /*yield*/, askQuestion("Competenze linguistiche (separate da virgola): ")];
-                case 5:
+                case 6:
                     competenzeLinguistiche = _a.sent();
                     return [4 /*yield*/, askQuestion("Formazione di interesse: ")];
-                case 6:
+                case 7:
                     formazioneDiInteresse = _a.sent();
                     nuovoPartecipante = new Partecipante(nome, cognome, paeseDiOrigine, istruzione, competenzeLinguistiche, formazioneDiInteresse);
                     partecipanti.push(nuovoPartecipante);
-                    console.log("\nPartecipante aggiunto con successo!");
-                    rl.question("\nPremi un tasto per tornare al menu principale...", function () {
-                        showMainMenu();
-                    });
+                    return [4 /*yield*/, showMessage("Partecipante aggiunto con successo!")];
+                case 8:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
-    }); })();
+    });
 }
 function createCorso() {
-    var _this = this;
-    console.log("\n=== Crea un nuovo corso ===");
-    var askQuestion = function (question) {
-        return new Promise(function (resolve) {
-            rl.question(question, function (answer) {
-                resolve(answer);
-            });
-        });
-    };
-    (function () { return __awaiter(_this, void 0, void 0, function () {
+    return __awaiter(this, void 0, void 0, function () {
         var titoloCorso, descrizione, settoreProfessionale, durata, nuovoCorso;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, askQuestion("Titolo del corso: ")];
+                case 0: return [4 /*yield*/, showMessage("=== Crea un nuovo corso ===")];
                 case 1:
+                    _a.sent();
+                    return [4 /*yield*/, askQuestion("Titolo del corso: ")];
+                case 2:
                     titoloCorso = _a.sent();
                     return [4 /*yield*/, askQuestion("Descrizione: ")];
-                case 2:
+                case 3:
                     descrizione = _a.sent();
                     return [4 /*yield*/, askQuestion("Settore professionale: ")];
-                case 3:
+                case 4:
                     settoreProfessionale = _a.sent();
                     return [4 /*yield*/, askQuestion("Durata (es. 3 mesi): ")];
-                case 4:
+                case 5:
                     durata = _a.sent();
                     nuovoCorso = new Corso(titoloCorso, descrizione, settoreProfessionale, durata);
                     corsi.push(nuovoCorso);
-                    console.log("\nCorso creato con successo!");
-                    rl.question("\nPremi un tasto per tornare al menu principale...", function () {
-                        showMainMenu();
-                    });
+                    return [4 /*yield*/, showMessage("Corso creato con successo!")];
+                case 6:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
-    }); })();
+    });
 }
 function addAzienda() {
-    var _this = this;
-    console.log("\n=== Registra una nuova azienda ===");
-    var askQuestion = function (question) {
-        return new Promise(function (resolve) {
-            rl.question(question, function (answer) {
-                resolve(answer);
-            });
-        });
-    };
-    (function () { return __awaiter(_this, void 0, void 0, function () {
+    return __awaiter(this, void 0, void 0, function () {
         var nomeAzienda, settoreDiAttività, descrizione, posizioniAperte, nuovaAzienda;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, askQuestion("Nome azienda: ")];
+                case 0: return [4 /*yield*/, showMessage("=== Registra una nuova azienda ===")];
                 case 1:
+                    _a.sent();
+                    return [4 /*yield*/, askQuestion("Nome azienda: ")];
+                case 2:
                     nomeAzienda = _a.sent();
                     return [4 /*yield*/, askQuestion("Settore di attività: ")];
-                case 2:
+                case 3:
                     settoreDiAttività = _a.sent();
                     return [4 /*yield*/, askQuestion("Descrizione: ")];
-                case 3:
+                case 4:
                     descrizione = _a.sent();
                     return [4 /*yield*/, askQuestion("Posizioni aperte (separate da virgola): ")];
-                case 4:
+                case 5:
                     posizioniAperte = (_a.sent())
                         .split(",")
                         .map(function (pos) { return pos.trim(); });
                     nuovaAzienda = new Azienda(nomeAzienda, settoreDiAttività, descrizione, posizioniAperte);
                     aziende.push(nuovaAzienda);
-                    console.log("\nAzienda registrata con successo!");
-                    rl.question("\nPremi un tasto per tornare al menu principale...", function () {
-                        showMainMenu();
-                    });
+                    return [4 /*yield*/, showMessage("Azienda registrata con successo!")];
+                case 6:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
-    }); })();
+    });
 }
 function iscriviPartecipanteACorso() {
-    var _this = this;
-    if (partecipanti.length === 0 || corsi.length === 0) {
-        console.log("\nErrore: Nessun partecipante o corso disponibile.");
-        rl.question("\nPremi un tasto per tornare al menu principale...", function () {
-            showMainMenu();
-        });
-        return;
-    }
-    console.log("\n=== Iscrivi un partecipante a un corso ===");
-    console.log("\nElenco partecipanti:");
-    partecipanti.forEach(function (p, index) {
-        console.log("".concat(index + 1, ". ").concat(p.nome, " ").concat(p.cognome));
-    });
-    console.log("\nElenco corsi:");
-    corsi.forEach(function (c, index) {
-        console.log("".concat(index + 1, ". ").concat(c.titoloCorso));
-    });
-    var askQuestion = function (question) {
-        return new Promise(function (resolve) {
-            rl.question(question, function (answer) {
-                resolve(answer);
-            });
-        });
-    };
-    (function () { return __awaiter(_this, void 0, void 0, function () {
-        var partecipanteIndex, _a, corsoIndex, _b, partecipante, corso;
+    return __awaiter(this, void 0, void 0, function () {
+        var message, partecipanteIndex, _a, corsoIndex, _b, partecipante, corso;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    _a = parseInt;
-                    return [4 /*yield*/, askQuestion("\nSeleziona il numero del partecipante: ")];
+                    if (!(partecipanti.length === 0 || corsi.length === 0)) return [3 /*break*/, 2];
+                    return [4 /*yield*/, showMessage("Errore: Nessun partecipante o corso disponibile.")];
                 case 1:
-                    partecipanteIndex = _a.apply(void 0, [_c.sent()]) -
-                        1;
+                    _c.sent();
+                    return [2 /*return*/];
+                case 2:
+                    message = "=== Iscrivi un partecipante a un corso ===\n\nElenco partecipanti:\n";
+                    partecipanti.forEach(function (p, index) {
+                        message += "".concat(index + 1, ". ").concat(p.nome, " ").concat(p.cognome, "\n");
+                    });
+                    message += "\nElenco corsi:\n";
+                    corsi.forEach(function (c, index) {
+                        message += "".concat(index + 1, ". ").concat(c.titoloCorso, "\n");
+                    });
+                    _a = parseInt;
+                    return [4 /*yield*/, askQuestion(message + "\nSeleziona il numero del partecipante: ")];
+                case 3:
+                    partecipanteIndex = _a.apply(void 0, [_c.sent()]) - 1;
                     _b = parseInt;
                     return [4 /*yield*/, askQuestion("Seleziona il numero del corso: ")];
-                case 2:
+                case 4:
                     corsoIndex = _b.apply(void 0, [_c.sent()]) - 1;
-                    if (isNaN(partecipanteIndex) ||
+                    if (!(isNaN(partecipanteIndex) ||
                         partecipanteIndex < 0 ||
                         partecipanteIndex >= partecipanti.length ||
                         isNaN(corsoIndex) ||
                         corsoIndex < 0 ||
-                        corsoIndex >= corsi.length) {
-                        console.log("\nSelezione non valida.");
+                        corsoIndex >= corsi.length)) return [3 /*break*/, 6];
+                    return [4 /*yield*/, showMessage("Selezione non valida.")];
+                case 5:
+                    _c.sent();
+                    return [3 /*break*/, 8];
+                case 6:
+                    partecipante = partecipanti[partecipanteIndex];
+                    corso = corsi[corsoIndex];
+                    partecipante.iscrivitiCorso(corso);
+                    return [4 /*yield*/, showMessage("".concat(partecipante.nome, " ").concat(partecipante.cognome, " \u00E8 stato iscritto al corso \"").concat(corso.titoloCorso, "\""))];
+                case 7:
+                    _c.sent();
+                    _c.label = 8;
+                case 8: return [2 /*return*/];
+            }
+        });
+    });
+}
+function showPartecipanti() {
+    return __awaiter(this, void 0, void 0, function () {
+        var message;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    message = "=== Elenco Partecipanti ===\n";
+                    if (partecipanti.length === 0) {
+                        message += "Nessun partecipante registrato.";
                     }
                     else {
-                        partecipante = partecipanti[partecipanteIndex];
-                        corso = corsi[corsoIndex];
-                        partecipante.iscrivitiCorso(corso);
-                        console.log("\n".concat(partecipante.nome, " ").concat(partecipante.cognome, " \u00E8 stato iscritto al corso \"").concat(corso.titoloCorso, "\""));
+                        partecipanti.forEach(function (p, index) {
+                            message += "\n".concat(index + 1, ". ").concat(p.nome, " ").concat(p.cognome, "\n");
+                            message += "   Paese di origine: ".concat(p.paeseDiOrigine, "\n");
+                            message += "   Istruzione: ".concat(p.istruzione, "\n");
+                            message += "   Competenze linguistiche: ".concat(p.competenzeLinguistiche, "\n");
+                            message += "   Interesse: ".concat(p.formazioneDiInteresse, "\n");
+                        });
                     }
-                    rl.question("\nPremi un tasto per tornare al menu principale...", function () {
-                        showMainMenu();
-                    });
+                    return [4 /*yield*/, showMessage(message)];
+                case 1:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
-    }); })();
-}
-function showPartecipanti() {
-    console.log("\n=== Elenco Partecipanti ===");
-    if (partecipanti.length === 0) {
-        console.log("Nessun partecipante registrato.");
-    }
-    else {
-        partecipanti.forEach(function (p, index) {
-            console.log("\n".concat(index + 1, ". ").concat(p.nome, " ").concat(p.cognome));
-            console.log("   Paese di origine: ".concat(p.paeseDiOrigine));
-            console.log("   Istruzione: ".concat(p.istruzione));
-            console.log("   Competenze linguistiche: ".concat(p.competenzeLinguistiche));
-            console.log("   Interesse: ".concat(p.formazioneDiInteresse));
-        });
-    }
-    rl.question("\nPremi un tasto per tornare al menu principale...", function () {
-        showMainMenu();
     });
 }
 function assumiPartecipanteInAzienda() {
-    var _this = this;
-    if (partecipanti.length === 0 || aziende.length === 0) {
-        console.log("\nErrore: Nessun partecipante o azienda disponibile.");
-        rl.question("\nPremi un tasto per tornare al menu principale...", function () {
-            showMainMenu();
-        });
-        return;
-    }
-    console.log("\n=== Assumi un partecipante in un'azienda ===");
-    console.log("\nElenco partecipanti:");
-    partecipanti.forEach(function (p, index) {
-        console.log("".concat(index + 1, ". ").concat(p.nome, " ").concat(p.cognome));
-    });
-    console.log("\nElenco aziende:");
-    aziende.forEach(function (a, index) {
-        console.log("".concat(index + 1, ". ").concat(a.nomeAzienda, " (").concat(a.settoreDiAttività, ")"));
-    });
-    var askQuestion = function (question) {
-        return new Promise(function (resolve) {
-            rl.question(question, function (answer) {
-                resolve(answer);
-            });
-        });
-    };
-    (function () { return __awaiter(_this, void 0, void 0, function () {
-        var partecipanteIndex, _a, aziendaIndex, _b, partecipante, azienda, posizioneScelta, _c, nuovaPosizione;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+    return __awaiter(this, void 0, void 0, function () {
+        var message, partecipanteIndex, _a, aziendaIndex, _b, partecipante, azienda, posizione;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _a = parseInt;
-                    return [4 /*yield*/, askQuestion("\nSeleziona il numero del partecipante: ")];
+                    if (!(partecipanti.length === 0 || aziende.length === 0)) return [3 /*break*/, 2];
+                    return [4 /*yield*/, showMessage("Errore: Nessun partecipante o azienda disponibile.")];
                 case 1:
-                    partecipanteIndex = _a.apply(void 0, [_d.sent()]) -
-                        1;
+                    _c.sent();
+                    return [2 /*return*/];
+                case 2:
+                    message = "=== Assumi un partecipante in un'azienda ===\n\nElenco partecipanti:\n";
+                    partecipanti.forEach(function (p, index) {
+                        message += "".concat(index + 1, ". ").concat(p.nome, " ").concat(p.cognome, "\n");
+                    });
+                    message += "\nElenco aziende:\n";
+                    aziende.forEach(function (a, index) {
+                        message += "".concat(index + 1, ". ").concat(a.nomeAzienda, " - Posizioni aperte: ").concat(a.posizioniAperte.join(", "), "\n");
+                    });
+                    _a = parseInt;
+                    return [4 /*yield*/, askQuestion(message + "\nSeleziona il numero del partecipante: ")];
+                case 3:
+                    partecipanteIndex = _a.apply(void 0, [_c.sent()]) - 1;
                     _b = parseInt;
                     return [4 /*yield*/, askQuestion("Seleziona il numero dell'azienda: ")];
-                case 2:
-                    aziendaIndex = _b.apply(void 0, [_d.sent()]) - 1;
+                case 4:
+                    aziendaIndex = _b.apply(void 0, [_c.sent()]) - 1;
                     if (!(isNaN(partecipanteIndex) ||
                         partecipanteIndex < 0 ||
                         partecipanteIndex >= partecipanti.length ||
                         isNaN(aziendaIndex) ||
                         aziendaIndex < 0 ||
-                        aziendaIndex >= aziende.length)) return [3 /*break*/, 3];
-                    console.log("\nSelezione non valida.");
-                    return [3 /*break*/, 7];
-                case 3:
+                        aziendaIndex >= aziende.length)) return [3 /*break*/, 6];
+                    return [4 /*yield*/, showMessage("Selezione non valida.")];
+                case 5:
+                    _c.sent();
+                    return [2 /*return*/];
+                case 6:
                     partecipante = partecipanti[partecipanteIndex];
                     azienda = aziende[aziendaIndex];
-                    console.log("\nPosizioni aperte in ".concat(azienda.nomeAzienda, ":"));
-                    if (!(azienda.posizioniAperte.length > 0)) return [3 /*break*/, 5];
-                    azienda.posizioniAperte.forEach(function (pos, index) {
-                        console.log("".concat(index + 1, ". ").concat(pos));
-                    });
-                    _c = parseInt;
-                    return [4 /*yield*/, askQuestion("\nScegli il numero della posizione: ")];
-                case 4:
-                    posizioneScelta = _c.apply(void 0, [_d.sent()]) -
-                        1;
-                    if (posizioneScelta >= 0 &&
-                        posizioneScelta < azienda.posizioniAperte.length) {
-                        azienda.offriPosizione(partecipante, azienda.posizioniAperte[posizioneScelta]);
-                        console.log("\nPartecipante assumuto con successo!");
-                    }
-                    return [3 /*break*/, 7];
-                case 5: return [4 /*yield*/, askQuestion("Nessuna posizione aperta. Inserisci la nuova posizione: ")];
-                case 6:
-                    nuovaPosizione = _d.sent();
-                    azienda.offriPosizione(partecipante, nuovaPosizione);
-                    _d.label = 7;
+                    return [4 /*yield*/, askQuestion("Inserisci la posizione per ".concat(partecipante.nome, " in ").concat(azienda.nomeAzienda, ": "))];
                 case 7:
-                    rl.question("\nPremi un tasto per tornare al menu principale...", function () {
-                        showMainMenu();
-                    });
+                    posizione = _c.sent();
+                    azienda.offriPosizione(partecipante, posizione);
+                    return [4 /*yield*/, showMessage("".concat(partecipante.nome, " ").concat(partecipante.cognome, " \u00E8 stato assunto come ").concat(posizione, " in ").concat(azienda.nomeAzienda))];
+                case 8:
+                    _c.sent();
                     return [2 /*return*/];
             }
         });
-    }); })();
+    });
 }
 function showAziende() {
-    console.log("\n=== Elenco Aziende ===");
-    if (aziende.length === 0) {
-        console.log("Nessuna azienda registrata.");
-    }
-    else {
-        aziende.forEach(function (a, index) {
-            var _a;
-            console.log("\n".concat(index + 1, ". ").concat(a.nomeAzienda, " (").concat(a.settoreDiAttività, ")"));
-            console.log("   ".concat(a.descrizione));
-            console.log("   Posizioni aperte:", a.posizioniAperte.join(", ") || "Nessuna");
-            var numDipendenti = ((_a = a.dipendenti) === null || _a === void 0 ? void 0 : _a.length) || 0;
-            console.log("   Dipendenti: ".concat(numDipendenti));
+    return __awaiter(this, void 0, void 0, function () {
+        var message;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    message = "=== Elenco Aziende ===\n";
+                    if (aziende.length === 0) {
+                        message += "Nessuna azienda registrata.";
+                    }
+                    else {
+                        aziende.forEach(function (a, index) {
+                            message += "\n".concat(index + 1, ". ").concat(a.nomeAzienda, " (").concat(a.settoreDiAttività, ")\n");
+                            message += "   ".concat(a.descrizione, "\n");
+                            message += "   Posizioni aperte: ".concat(a.posizioniAperte.join(", ") || "Nessuna", "\n");
+                            if (a.dipendenti.length > 0) {
+                                message += "   Dipendenti:\n";
+                                a.dipendenti.forEach(function (d, i) {
+                                    message += "      ".concat(i + 1, ". ").concat(d.partecipante.nome, " ").concat(d.partecipante.cognome, " - ").concat(d.posizione, "\n");
+                                });
+                            }
+                        });
+                    }
+                    return [4 /*yield*/, showMessage(message)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
         });
-    }
-    rl.question("\nPremi un tasto per tornare al menu principale...", function () {
-        showMainMenu();
     });
 }
 function showCorsi() {
-    console.log("\n=== Elenco Corsi ===");
-    if (corsi.length === 0) {
-        console.log("Nessun corso disponibile.");
-    }
-    else {
-        corsi.forEach(function (c, index) {
-            var _a;
-            console.log("\n".concat(index + 1, ". ").concat(c.titoloCorso));
-            console.log("   Descrizione: ".concat(c.descrizione));
-            console.log("   Settore: ".concat(c.settoreProfessionale));
-            console.log("   Durata: ".concat(c.durata));
-            var numPartecipanti = ((_a = c["partecipanti"]) === null || _a === void 0 ? void 0 : _a.length) || 0;
-            console.log("\n   Partecipanti (".concat(numPartecipanti, "):"));
-            if (numPartecipanti > 0) {
-                c["partecipanti"].forEach(function (p, i) {
-                    console.log("   ".concat(i + 1, ". ").concat(p.nome, " ").concat(p.cognome));
-                    console.log("      Paese: ".concat(p.paeseDiOrigine));
-                    console.log("      Competenze: ".concat(p.competenzeLinguistiche));
-                });
-            }
-            else {
-                console.log("   Nessun partecipante iscritto al corso.");
+    return __awaiter(this, void 0, void 0, function () {
+        var message;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    message = "=== Elenco Corsi ===\n";
+                    if (corsi.length === 0) {
+                        message += "Nessun corso disponibile.";
+                    }
+                    else {
+                        corsi.forEach(function (c, index) {
+                            message += "\n".concat(index + 1, ". ").concat(c.titoloCorso, "\n");
+                            message += "   Settore: ".concat(c.settoreProfessionale, "\n");
+                            message += "   Durata: ".concat(c.durata, "\n");
+                            message += "   Descrizione: ".concat(c.descrizione, "\n");
+                            if (c.partecipanti.length > 0) {
+                                message += "   Iscritti:\n";
+                                c.partecipanti.forEach(function (p, i) {
+                                    message += "      ".concat(i + 1, ". ").concat(p.nome, " ").concat(p.cognome, "\n");
+                                });
+                            }
+                        });
+                    }
+                    return [4 /*yield*/, showMessage(message)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
             }
         });
-    }
-    rl.question("\nPremi un tasto per tornare al menu principale...", function () {
-        showMainMenu();
     });
 }
 console.log("Benvenuto nel Sistema di Gestione IncluDO!");
-showMainMenu();
-rl.on("close", function () {
-    console.log("\nGrazie per aver utilizzato il nostro sistema!");
-    process.exit(0);
-});
+showMainMenu().catch(console.error);
 var partecipante1 = new Partecipante("Luka", "Modric", "Croazia", "Laurea in Informatica", "Inglese, Croato, Spagnolo", "Sviluppo Web");
 var partecipante2 = new Partecipante("Cristiano", "Ronaldo", "Portogallo", "Laurea in Economia", "Inglese, Portoghese, Spagnolo", "Analista di mercato");
 var partecipante3 = new Partecipante("Lionel", "Messi", "Argentina", "Laurea in Fisica", "Argentino", "Scienziato");

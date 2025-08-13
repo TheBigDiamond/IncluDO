@@ -13,6 +13,7 @@ interface ICorso {
   descrizione: string;
   settoreProfessionale: string;
   durata: string;
+  partecipanti: IPartecipante[];
   elencoIscritti(partecipanti: IPartecipante[]): string;
   aggiungiPartecipante(partecipante: IPartecipante): void;
 }
@@ -64,7 +65,7 @@ class Corso implements ICorso {
   descrizione: string;
   settoreProfessionale: string;
   durata: string;
-  private partecipanti: IPartecipante[] = [];
+  partecipanti: IPartecipante[] = [];
 
   constructor(
     titoloCorso: string,
@@ -140,399 +141,317 @@ class Azienda implements IAzienda {
   }
 }
 
-import * as readline from "readline";
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+function showMessage(message) {
+  alert(message);
+}
 
-const partecipanti: IPartecipante[] = [];
-const corsi: ICorso[] = [];
-const aziende: IAzienda[] = [];
-
-function showMainMenu() {
-  console.log("\n=== Sistema di Gestione IncluDO ===");
-  console.log("1. Aggiungi un partecipante");
-  console.log("2. Crea un nuovo corso");
-  console.log("3. Registra una nuova azienda");
-  console.log("4. Iscrivi un partecipante a un corso");
-  console.log("5. Assumi un partecipante in un'azienda");
-  console.log("6. Visualizza tutti i partecipanti");
-  console.log("7. Visualizza tutti i corsi");
-  console.log("8. Visualizza le aziende");
-  console.log("9. Esci");
-
-  rl.question("\nSeleziona un'opzione: ", (answer) => {
-    switch (answer) {
-      case "1":
-        addPartecipante();
-        break;
-      case "2":
-        createCorso();
-        break;
-      case "3":
-        addAzienda();
-        break;
-      case "4":
-        iscriviPartecipanteACorso();
-        break;
-      case "5":
-        assumiPartecipanteInAzienda();
-        break;
-      case "6":
-        showPartecipanti();
-        break;
-      case "7":
-        showCorsi();
-        break;
-      case "8":
-        showAziende();
-        break;
-      case "9":
-        console.log("Arrivederci!");
-        rl.close();
-        break;
-      default:
-        console.log("Opzione non valida. Riprova.");
-        showMainMenu();
-    }
+// Funzione per chiedere input usando prompt (browser)
+function askQuestion(question: string): Promise<string> {
+  return new Promise((resolve) => {
+    const answer = prompt(question) || ''; // Fallback to empty string if null
+    resolve(answer);
   });
 }
 
-function addPartecipante() {
-  console.log("\n=== Aggiungi un nuovo partecipante ===");
+// Array per memorizzare le aziende
+const aziende: Azienda[] = [];
 
-  const askQuestion = (question: string): Promise<string> => {
-    return new Promise((resolve) => {
-      rl.question(question, (answer) => {
-        resolve(answer);
-      });
-    });
-  };
+// Array per memorizzare i corsi
+const corsi: Corso[] = [];
 
-  (async () => {
-    const nome = await askQuestion("Nome: ");
-    const cognome = await askQuestion("Cognome: ");
-    const paeseDiOrigine = await askQuestion("Paese di origine: ");
-    const istruzione = await askQuestion("Livello di istruzione: ");
-    const competenzeLinguistiche = await askQuestion(
-      "Competenze linguistiche (separate da virgola): "
-    );
-    const formazioneDiInteresse = await askQuestion(
-      "Formazione di interesse: "
-    );
+// Array per memorizzare i partecipanti
+const partecipanti: Partecipante[] = [];
 
-    const nuovoPartecipante = new Partecipante(
-      nome,
-      cognome,
-      paeseDiOrigine,
-      istruzione,
-      competenzeLinguistiche,
-      formazioneDiInteresse
-    );
+// Main menu
+async function showMainMenu() {
+  const menu = `=== Sistema di Gestione IncluDO ===
+1. Aggiungi un partecipante
+2. Crea un nuovo corso
+3. Registra una nuova azienda
+4. Iscrivi un partecipante a un corso
+5. Assumi un partecipante in un'azienda
+6. Visualizza tutti i partecipanti
+7. Visualizza tutti i corsi
+8. Visualizza le aziende
+9. Esci`;
 
-    partecipanti.push(nuovoPartecipante);
-    console.log("\nPartecipante aggiunto con successo!");
-    rl.question("\nPremi un tasto per tornare al menu principale...", () => {
-      showMainMenu();
-    });
-  })();
+  const answer = await askQuestion(menu + "\n\nSeleziona un'opzione: ");
+
+  switch (answer) {
+    case "1":
+      await addPartecipante();
+      break;
+    case "2":
+      await createCorso();
+      break;
+    case "3":
+      await addAzienda();
+      break;
+    case "4":
+      await iscriviPartecipanteACorso();
+      break;
+    case "5":
+      await assumiPartecipanteInAzienda();
+      break;
+    case "6":
+      await showPartecipanti();
+      break;
+    case "7":
+      await showCorsi();
+      break;
+    case "8":
+      await showAziende();
+      break;
+    case "9":
+      await showMessage("Arrivederci!");
+      // Qui termina senza closeApp perché siamo in browser
+      return;
+    default:
+      await showMessage("Opzione non valida. Riprova.");
+  }
+
+  // Ripeti il menu a meno che non esca
+  if (answer !== "9") {
+    await showMainMenu();
+  }
 }
 
-function createCorso() {
-  console.log("\n=== Crea un nuovo corso ===");
 
-  const askQuestion = (question: string): Promise<string> => {
-    return new Promise((resolve) => {
-      rl.question(question, (answer) => {
-        resolve(answer);
-      });
-    });
-  };
 
-  (async () => {
-    const titoloCorso = await askQuestion("Titolo del corso: ");
-    const descrizione = await askQuestion("Descrizione: ");
-    const settoreProfessionale = await askQuestion("Settore professionale: ");
-    const durata = await askQuestion("Durata (es. 3 mesi): ");
+async function addPartecipante() {
+  await showMessage("=== Aggiungi un nuovo partecipante ===");
 
-    const nuovoCorso = new Corso(
-      titoloCorso,
-      descrizione,
-      settoreProfessionale,
-      durata
-    );
+  const nome = await askQuestion("Nome: ");
+  const cognome = await askQuestion("Cognome: ");
+  const paeseDiOrigine = await askQuestion("Paese di origine: ");
+  const istruzione = await askQuestion("Livello di istruzione: ");
+  const competenzeLinguistiche = await askQuestion(
+    "Competenze linguistiche (separate da virgola): "
+  );
+  const formazioneDiInteresse = await askQuestion("Formazione di interesse: ");
 
-    corsi.push(nuovoCorso);
-    console.log("\nCorso creato con successo!");
-    rl.question("\nPremi un tasto per tornare al menu principale...", () => {
-      showMainMenu();
-    });
-  })();
+  const nuovoPartecipante = new Partecipante(
+    nome,
+    cognome,
+    paeseDiOrigine,
+    istruzione,
+    competenzeLinguistiche,
+    formazioneDiInteresse
+  );
+
+  partecipanti.push(nuovoPartecipante);
+  await showMessage("Partecipante aggiunto con successo!");
 }
 
-function addAzienda() {
-  console.log("\n=== Registra una nuova azienda ===");
 
-  const askQuestion = (question: string): Promise<string> => {
-    return new Promise((resolve) => {
-      rl.question(question, (answer) => {
-        resolve(answer);
-      });
-    });
-  };
+async function createCorso() {
+  await showMessage("=== Crea un nuovo corso ===");
 
-  (async () => {
-    const nomeAzienda = await askQuestion("Nome azienda: ");
-    const settoreDiAttività = await askQuestion("Settore di attività: ");
-    const descrizione = await askQuestion("Descrizione: ");
-    const posizioniAperte = (
-      await askQuestion("Posizioni aperte (separate da virgola): ")
-    )
-      .split(",")
-      .map((pos) => pos.trim());
+  const titoloCorso = await askQuestion("Titolo del corso: ");
+  const descrizione = await askQuestion("Descrizione: ");
+  const settoreProfessionale = await askQuestion("Settore professionale: ");
+  const durata = await askQuestion("Durata (es. 3 mesi): ");
 
-    const nuovaAzienda = new Azienda(
-      nomeAzienda,
-      settoreDiAttività,
-      descrizione,
-      posizioniAperte
-    );
+  const nuovoCorso = new Corso(
+    titoloCorso,
+    descrizione,
+    settoreProfessionale,
+    durata
+  );
 
-    aziende.push(nuovaAzienda);
-    console.log("\nAzienda registrata con successo!");
-    rl.question("\nPremi un tasto per tornare al menu principale...", () => {
-      showMainMenu();
-    });
-  })();
+  corsi.push(nuovoCorso);
+  await showMessage("Corso creato con successo!");
 }
 
-function iscriviPartecipanteACorso() {
+
+async function addAzienda() {
+  await showMessage("=== Registra una nuova azienda ===");
+
+  const nomeAzienda = await askQuestion("Nome azienda: ");
+  const settoreDiAttività = await askQuestion("Settore di attività: ");
+  const descrizione = await askQuestion("Descrizione: ");
+  const posizioniAperte = (
+    await askQuestion("Posizioni aperte (separate da virgola): ")
+  )
+    .split(",")
+    .map((pos: string) => pos.trim());
+
+  const nuovaAzienda = new Azienda(
+    nomeAzienda,
+    settoreDiAttività,
+    descrizione,
+    posizioniAperte
+  );
+
+  aziende.push(nuovaAzienda);
+  await showMessage("Azienda registrata con successo!");
+}
+
+
+async function iscriviPartecipanteACorso() {
   if (partecipanti.length === 0 || corsi.length === 0) {
-    console.log("\nErrore: Nessun partecipante o corso disponibile.");
-    rl.question("\nPremi un tasto per tornare al menu principale...", () => {
-      showMainMenu();
-    });
+    await showMessage("Errore: Nessun partecipante o corso disponibile.");
     return;
   }
 
-  console.log("\n=== Iscrivi un partecipante a un corso ===");
-
-  console.log("\nElenco partecipanti:");
+  let message =
+    "=== Iscrivi un partecipante a un corso ===\n\nElenco partecipanti:\n";
   partecipanti.forEach((p, index) => {
-    console.log(`${index + 1}. ${p.nome} ${p.cognome}`);
+    message += `${index + 1}. ${p.nome} ${p.cognome}\n`;
   });
 
-  console.log("\nElenco corsi:");
+  message += "\nElenco corsi:\n";
   corsi.forEach((c, index) => {
-    console.log(`${index + 1}. ${c.titoloCorso}`);
+    message += `${index + 1}. ${c.titoloCorso}\n`;
   });
 
-  const askQuestion = (question: string): Promise<string> => {
-    return new Promise((resolve) => {
-      rl.question(question, (answer) => {
-        resolve(answer);
-      });
-    });
-  };
+  const partecipanteIndex =
+    parseInt(
+      await askQuestion(message + "\nSeleziona il numero del partecipante: ")
+    ) - 1;
+  const corsoIndex =
+    parseInt(await askQuestion("Seleziona il numero del corso: ")) - 1;
 
-  (async () => {
-    const partecipanteIndex =
-      parseInt(await askQuestion("\nSeleziona il numero del partecipante: ")) -
-      1;
-    const corsoIndex =
-      parseInt(await askQuestion("Seleziona il numero del corso: ")) - 1;
+  if (
+    isNaN(partecipanteIndex) ||
+    partecipanteIndex < 0 ||
+    partecipanteIndex >= partecipanti.length ||
+    isNaN(corsoIndex) ||
+    corsoIndex < 0 ||
+    corsoIndex >= corsi.length
+  ) {
+    await showMessage("Selezione non valida.");
+  } else {
+    const partecipante = partecipanti[partecipanteIndex];
+    const corso = corsi[corsoIndex];
 
-    if (
-      isNaN(partecipanteIndex) ||
-      partecipanteIndex < 0 ||
-      partecipanteIndex >= partecipanti.length ||
-      isNaN(corsoIndex) ||
-      corsoIndex < 0 ||
-      corsoIndex >= corsi.length
-    ) {
-      console.log("\nSelezione non valida.");
-    } else {
-      const partecipante = partecipanti[partecipanteIndex];
-      const corso = corsi[corsoIndex];
-
-      partecipante.iscrivitiCorso(corso);
-      console.log(
-        `\n${partecipante.nome} ${partecipante.cognome} è stato iscritto al corso "${corso.titoloCorso}"`
-      );
-    }
-
-    rl.question("\nPremi un tasto per tornare al menu principale...", () => {
-      showMainMenu();
-    });
-  })();
+    partecipante.iscrivitiCorso(corso);
+    await showMessage(
+      `${partecipante.nome} ${partecipante.cognome} è stato iscritto al corso "${corso.titoloCorso}"`
+    );
+  }
 }
 
-function showPartecipanti() {
-  console.log("\n=== Elenco Partecipanti ===");
+
+async function showPartecipanti() {
+  let message = "=== Elenco Partecipanti ===\n";
   if (partecipanti.length === 0) {
-    console.log("Nessun partecipante registrato.");
+    message += "Nessun partecipante registrato.";
   } else {
     partecipanti.forEach((p, index) => {
-      console.log(`\n${index + 1}. ${p.nome} ${p.cognome}`);
-      console.log(`   Paese di origine: ${p.paeseDiOrigine}`);
-      console.log(`   Istruzione: ${p.istruzione}`);
-      console.log(`   Competenze linguistiche: ${p.competenzeLinguistiche}`);
-      console.log(`   Interesse: ${p.formazioneDiInteresse}`);
+      message += `\n${index + 1}. ${p.nome} ${p.cognome}\n`;
+      message += `   Paese di origine: ${p.paeseDiOrigine}\n`;
+      message += `   Istruzione: ${p.istruzione}\n`;
+      message += `   Competenze linguistiche: ${p.competenzeLinguistiche}\n`;
+      message += `   Interesse: ${p.formazioneDiInteresse}\n`;
     });
   }
-
-  rl.question("\nPremi un tasto per tornare al menu principale...", () => {
-    showMainMenu();
-  });
+  await showMessage(message);
 }
 
-function assumiPartecipanteInAzienda() {
+
+async function assumiPartecipanteInAzienda() {
   if (partecipanti.length === 0 || aziende.length === 0) {
-    console.log("\nErrore: Nessun partecipante o azienda disponibile.");
-    rl.question("\nPremi un tasto per tornare al menu principale...", () => {
-      showMainMenu();
-    });
+    await showMessage("Errore: Nessun partecipante o azienda disponibile.");
     return;
   }
 
-  console.log("\n=== Assumi un partecipante in un'azienda ===");
-
-  console.log("\nElenco partecipanti:");
+  let message =
+    "=== Assumi un partecipante in un'azienda ===\n\nElenco partecipanti:\n";
   partecipanti.forEach((p, index) => {
-    console.log(`${index + 1}. ${p.nome} ${p.cognome}`);
+    message += `${index + 1}. ${p.nome} ${p.cognome}\n`;
   });
 
-  console.log("\nElenco aziende:");
+  message += "\nElenco aziende:\n";
   aziende.forEach((a, index) => {
-    console.log(`${index + 1}. ${a.nomeAzienda} (${a.settoreDiAttività})`);
+    message += `${index + 1}. ${
+      a.nomeAzienda
+    } - Posizioni aperte: ${a.posizioniAperte.join(", ")}\n`;
   });
 
-  const askQuestion = (question: string): Promise<string> => {
-    return new Promise((resolve) => {
-      rl.question(question, (answer) => {
-        resolve(answer);
-      });
-    });
-  };
+  const partecipanteIndex =
+    parseInt(
+      await askQuestion(message + "\nSeleziona il numero del partecipante: ")
+    ) - 1;
+  const aziendaIndex =
+    parseInt(await askQuestion("Seleziona il numero dell'azienda: ")) - 1;
 
-  (async () => {
-    const partecipanteIndex =
-      parseInt(await askQuestion("\nSeleziona il numero del partecipante: ")) -
-      1;
-    const aziendaIndex =
-      parseInt(await askQuestion("Seleziona il numero dell'azienda: ")) - 1;
+  if (
+    isNaN(partecipanteIndex) ||
+    partecipanteIndex < 0 ||
+    partecipanteIndex >= partecipanti.length ||
+    isNaN(aziendaIndex) ||
+    aziendaIndex < 0 ||
+    aziendaIndex >= aziende.length
+  ) {
+    await showMessage("Selezione non valida.");
+    return;
+  }
 
-    if (
-      isNaN(partecipanteIndex) ||
-      partecipanteIndex < 0 ||
-      partecipanteIndex >= partecipanti.length ||
-      isNaN(aziendaIndex) ||
-      aziendaIndex < 0 ||
-      aziendaIndex >= aziende.length
-    ) {
-      console.log("\nSelezione non valida.");
-    } else {
-      const partecipante = partecipanti[partecipanteIndex];
-      const azienda = aziende[aziendaIndex];
+  const partecipante = partecipanti[partecipanteIndex];
+  const azienda = aziende[aziendaIndex];
 
-      console.log(`\nPosizioni aperte in ${azienda.nomeAzienda}:`);
-      if (azienda.posizioniAperte.length > 0) {
-        azienda.posizioniAperte.forEach((pos, index) => {
-          console.log(`${index + 1}. ${pos}`);
-        });
+  const posizione = await askQuestion(
+    `Inserisci la posizione per ${partecipante.nome} in ${azienda.nomeAzienda}: `
+  );
 
-        const posizioneScelta =
-          parseInt(await askQuestion("\nScegli il numero della posizione: ")) -
-          1;
-
-        if (
-          posizioneScelta >= 0 &&
-          posizioneScelta < azienda.posizioniAperte.length
-        ) {
-          azienda.offriPosizione(
-            partecipante,
-            azienda.posizioniAperte[posizioneScelta]
-          );
-          console.log("\nPartecipante assumuto con successo!");
-        }
-      } else {
-        const nuovaPosizione = await askQuestion(
-          "Nessuna posizione aperta. Inserisci la nuova posizione: "
-        );
-        azienda.offriPosizione(partecipante, nuovaPosizione);
-      }
-    }
-
-    rl.question("\nPremi un tasto per tornare al menu principale...", () => {
-      showMainMenu();
-    });
-  })();
+  azienda.offriPosizione(partecipante, posizione);
+  await showMessage(
+    `${partecipante.nome} ${partecipante.cognome} è stato assunto come ${posizione} in ${azienda.nomeAzienda}`
+  );
 }
 
-function showAziende() {
-  console.log("\n=== Elenco Aziende ===");
+
+async function showAziende() {
+  let message = "=== Elenco Aziende ===\n";
   if (aziende.length === 0) {
-    console.log("Nessuna azienda registrata.");
+    message += "Nessuna azienda registrata.";
   } else {
     aziende.forEach((a, index) => {
-      console.log(`\n${index + 1}. ${a.nomeAzienda} (${a.settoreDiAttività})`);
-      console.log(`   ${a.descrizione}`);
-      console.log(
-        "   Posizioni aperte:",
+      message += `\n${index + 1}. ${a.nomeAzienda} (${a.settoreDiAttività})\n`;
+      message += `   ${a.descrizione}\n`;
+      message += `   Posizioni aperte: ${
         a.posizioniAperte.join(", ") || "Nessuna"
-      );
-
-      const numDipendenti = a.dipendenti?.length || 0;
-      console.log(`   Dipendenti: ${numDipendenti}`);
-    });
-  }
-
-  rl.question("\nPremi un tasto per tornare al menu principale...", () => {
-    showMainMenu();
-  });
-}
-
-function showCorsi() {
-  console.log("\n=== Elenco Corsi ===");
-  if (corsi.length === 0) {
-    console.log("Nessun corso disponibile.");
-  } else {
-    corsi.forEach((c, index) => {
-      console.log(`\n${index + 1}. ${c.titoloCorso}`);
-      console.log(`   Descrizione: ${c.descrizione}`);
-      console.log(`   Settore: ${c.settoreProfessionale}`);
-      console.log(`   Durata: ${c.durata}`);
-
-      const numPartecipanti = c["partecipanti"]?.length || 0;
-      console.log(`\n   Partecipanti (${numPartecipanti}):`);
-
-      if (numPartecipanti > 0) {
-        c["partecipanti"].forEach((p, i) => {
-          console.log(`   ${i + 1}. ${p.nome} ${p.cognome}`);
-          console.log(`      Paese: ${p.paeseDiOrigine}`);
-          console.log(`      Competenze: ${p.competenzeLinguistiche}`);
+      }\n`;
+      if (a.dipendenti.length > 0) {
+        message += "   Dipendenti:\n";
+        a.dipendenti.forEach((d, i) => {
+          message += `      ${i + 1}. ${d.partecipante.nome} ${
+            d.partecipante.cognome
+          } - ${d.posizione}\n`;
         });
-      } else {
-        console.log("   Nessun partecipante iscritto al corso.");
       }
     });
   }
-
-  rl.question("\nPremi un tasto per tornare al menu principale...", () => {
-    showMainMenu();
-  });
+  await showMessage(message);
 }
 
+
+async function showCorsi() {
+  let message = "=== Elenco Corsi ===\n";
+  if (corsi.length === 0) {
+    message += "Nessun corso disponibile.";
+  } else {
+    corsi.forEach((c, index) => {
+      message += `\n${index + 1}. ${c.titoloCorso}\n`;
+      message += `   Settore: ${c.settoreProfessionale}\n`;
+      message += `   Durata: ${c.durata}\n`;
+      message += `   Descrizione: ${c.descrizione}\n`;
+      if (c.partecipanti.length > 0) {
+        message += "   Iscritti:\n";
+        c.partecipanti.forEach((p, i) => {
+          message += `      ${i + 1}. ${p.nome} ${p.cognome}\n`;
+        });
+      }
+    });
+  }
+  await showMessage(message);
+}
+
+
 console.log("Benvenuto nel Sistema di Gestione IncluDO!");
-showMainMenu();
-
-rl.on("close", () => {
-  console.log("\nGrazie per aver utilizzato il nostro sistema!");
-  process.exit(0);
-});
-
+showMainMenu().catch(console.error);
 
 const partecipante1 = new Partecipante(
   "Luka",
