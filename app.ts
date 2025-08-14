@@ -146,7 +146,6 @@ function showMessage(message) {
   alert(message);
 }
 
-// Funzione per chiedere input usando prompt (browser)
 function askQuestion(question: string): Promise<string> {
   return new Promise((resolve) => {
     const answer = prompt(question) || ''; // Fallback to empty string if null

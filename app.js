@@ -99,7 +99,6 @@ var Azienda = /** @class */ (function () {
 function showMessage(message) {
     alert(message);
 }
-// Funzione per chiedere input usando prompt (browser)
 function askQuestion(question) {
     return new Promise(function (resolve) {
         var answer = prompt(question) || ''; // Fallback to empty string if null
