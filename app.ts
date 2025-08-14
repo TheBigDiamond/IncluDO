@@ -147,9 +147,13 @@ function showMessage(message) {
 }
 
 function askQuestion(question: string): Promise<string> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const answer = prompt(question) || ''; // Fallback to empty string if null
-    resolve(answer);
+    if (answer === null) {
+      reject(new Error("User cancelled the prompt"));
+    } else {
+      resolve(answer || '');
+    }
   });
 }
 
